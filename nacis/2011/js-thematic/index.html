@@ -8,14 +8,19 @@
 		
 		<!-- styles -->
 		<link rel="stylesheet" type="text/css" href="style/presentation.css" />
+		<link href="style/shCore.css" rel="stylesheet" type="text/css" />
+		<link href="style/shThemeDefault.css" rel="stylesheet" type="text/css" />
 		
+		<!-- code colorer stuff -->	
+		<script src="lib/xregexp.js" type="text/javascript"></script>	
+		<script src="lib/shCore.js" type="text/javascript"></script>
+		<script src="lib/shBrushJScript.js" type="text/javascript"></script>
 		
-		<!-- code colorer stuff -->
-		<link href="http://alexgorbatchev.com/pub/sh/current/styles/shThemeDefault.css" rel="stylesheet" type="text/css" />
-		<script src="http://alexgorbatchev.com/pub/sh/current/scripts/shCore.js" type="text/javascript"></script>
-		<script src="http://alexgorbatchev.com/pub/sh/current/scripts/shAutoloader.js" type="text/javascript"></script>
-		
-		
+		<script type="text/javascript">
+			
+			SyntaxHighlighter.all();
+					
+		</script>
 	</head>
 	
 	
@@ -27,13 +32,50 @@
 		
 		<h1>Thematic Cartography in JavaScript</h1>
 		
+		<div class="section">
+			<h2>By Zachary Forest Johnson</h2>
+			
+			<ul>
+				<li>Contact: zach.f.johnson@gmail.com</li>
+				<li>Presentation URL: <a href="http://indiemaps.github.com/presentations/nacis/2011/js-thematic/">http://indiemaps.github.com/presentations/nacis/2011/js-thematic/index.html</a></li>
+				<li><p>Code URLs:</p>
+					<ul>
+						<li>OpenLayers: <a href="https://github.com/indiemaps/OpenLayers-Symbology">https://github.com/indiemaps/OpenLayers-Symbology</a></li>
+						<li>Polymaps: <a href="https://github.com/indiemaps/Polymaps-Thematic">https://github.com/indiemaps/Polymaps-Thematic</a></li>
+					</ul>
+				</li>
+			</ul>
+		</div>
 		
-		<h2>By Zachary Forest Johnson</h2>
 		
 		
 		<div class="section">
 			<h2>Intro</h2>
 			
+			<h3>The goal:</h3>
+			<script type="syntaxhighlighter" class="brush: js"><![CDATA[
+				// pseudo-code
+				
+				var map = new Map(); // OpenLayers or PolyMaps
+				var choropleth = new Choropleth( map, 
+				{
+					url : 'election.kml',
+					indicator : 'votes_democratic'
+				});
+				
+				// more options set initially
+				var choropleth2 = new Choropleth( map,
+				{
+					url : 'election.kml',
+					indicator : 'votes_democratic',
+					classed : true,
+					numClasses : 7,
+					colorScheme : 'YlGn',
+					method : 'quantile'
+					
+				});
+			]]></script>
+							
 			<div class="section">
 				<h3>Thematic mapping in online mapping frameworks</h3>
 			</div>
@@ -42,11 +84,36 @@
 				<h3>Frameworks</h3>
 				
 				<div class="section">
+					<h4>What is a web mapping framework?</h4>
+					
+					<ul>
+						<li>loads data in various geo formats</li>
+						<li>map rendering</li>
+						<li>handle coordinate systems, transforms, etc.</li>
+						<li>map navigation (pan, zoom, search)</li>
+					</ul>
+					
+					<h4>More advanced</h4>
+					
+					<ul>
+						<li>geocoding</li>
+						<li>transform vector data to various map projections</li>
+						<li>GIS functions, such as area, intersect, buffer, etc.</li>
+						<li>built-in styling methods for vector data</li>
+					</ul>
+				</div>
+				
+				<div class="section">
 					<h4>Big name</h4>
 					
 					<ul>
-						
-						<li>Google</li>
+						<li>
+							<p>Google (2005)</p>
+							<img src="images/googleHacks.jpg" alt="" />
+							</li>
+						<li>Yahoo (2006)</li>
+						<li>MapQuest (2007)</li>
+						<li>Google Earth web API (2010)</li>
 					</ul>
 				</div>
 				
@@ -61,11 +128,13 @@
 				</div>
 				
 				<div class="section">
-					<h4>OpenLayers</h4>
+					<h4>OpenLayers (2005)</h4>
+					
+					<img src="images/OLStreetMap.png" alt="" />
 				</div>
 				
 				<div class="section">
-					<h4>Polymaps</h4>
+					<h4>Polymaps (2010)</h4>
 				</div>
 			</div>
 			
@@ -82,8 +151,50 @@
 				<h3>Data</h3>
 				
 				<div class="section">
-					<h4>KML</h4>
-					<h4>GeoJSON</h4>
+					<div class="section">
+						<h4>KML</h4>
+						
+						Example:
+						
+						<div></div>
+					</div>
+					
+					<div class="section">
+						<h4>GeoJSON</h4>
+						
+						Example:
+						
+						<div>
+							<script type="syntaxhighlighter" class="brush: js"><![CDATA[
+								{ 
+									"type": "Feature",
+						       		"geometry": {
+						         		"type": "Polygon",
+						         		"coordinates": [
+						           			[ [100.0, 0.0], [101.0, 0.0], [101.0, 1.0],
+						             		[100.0, 1.0], [100.0, 0.0] ]
+						           		]
+						       		},
+						       		"properties": {
+						         		"prop0": "value0",
+						         		"prop1": {"this": "that"}
+						     		}
+						       	}
+							]]></script>
+						</div>
+						
+						<h4>GeoJSON is not just JSON</h4>
+						
+						<a href="http://geocommons.com/overlays/78664.json">http://geocommons.com/overlays/78664.json</a>
+						
+						<a href="http://geocommons.com/overlays/78664/features.json?geojson=1">http://geocommons.com/overlays/78664/features.json?geojson=1</a>
+						
+						<script type="syntaxhighlighter" class="brush: js"><![CDATA[
+							
+						]]></script>
+						
+					</div>
+					
 				</div>
 			</div>
 			
@@ -102,10 +213,92 @@
 					<h4>CSS</h4>
 				</div>
 			</div>
+			
+			<div class="section">
+				<h3>Projections</h3>
+			</div>
 		</div>
 		
 		<div class="section">
 			<h2>My classes</h2>
+			
+			<div class="section">
+				<h3>API</h3>
+				
+				<ul>
+					<li>
+					<p>Choropleth</p>
+					
+					<script type="syntaxhighlighter" class="brush: js"><![CDATA[
+						var map = new OpenLayers.Map( 'map' );
+						
+						// simple base layer
+						var layer = new OpenLayers.Layer.WMS( "OpenLayers WMS", 
+		                    "http://vmap0.tiles.osgeo.org/wms/vmap0",
+		                    {layers: 'basic'},
+		                    {isBaseLayer: true} );
+		            	map.addLayer(layer);
+		            	
+		            	var choroLayer = new ol.thematic.Choropleth( map, {
+							'url' : url,
+							'indicator' : indicator,
+							'requestSuccess' : function( request )
+							{
+								map.zoomToExtent( this.layer.getDataExtent(), true );
+							}
+						});
+						
+						
+						// ... later in your app ...
+						
+						choroLayer.updateOptions(
+						{
+							colorScheme : 'RdBu',
+							numClasses : 5
+						});
+						
+						choroLayer.applyClassification();
+					]]></script>
+					
+					</li>
+					<li>
+					<p>Proportional symbol</p>
+					<script type="syntaxhighlighter" class="brush: js"><![CDATA[
+						var map = new OpenLayers.Map( 'map' );
+						
+						// simple base layer
+						var layer = new OpenLayers.Layer.WMS( "OpenLayers WMS", 
+		                    "http://vmap0.tiles.osgeo.org/wms/vmap0",
+		                    {layers: 'basic'},
+		                    {isBaseLayer: true} );
+		            	map.addLayer(layer);
+		            	
+		            	var propLayer = new ol.thematic.ProportionalSymbol( map, {
+							'url' : url,
+							'indicator' : indicator,
+							'requestSuccess' : function( request )
+							{
+								map.zoomToExtent( this.layer.getDataExtent(), true );
+							}
+						});
+						
+						
+						// ... later in your app ...
+						
+						propLayer.updateOptions(
+						{
+							minSize : 10,
+							maxSize : 500
+						});
+						
+						choroLayer.applyClassification();
+					]]></script>
+						
+					</li>
+					<li>Dot density</li>
+					<li>Noncontiguous cartogram</li>
+				</ul>
+			</div>
 			
 			<div class="section">
 				<h3>OpenLayers</h3>
@@ -134,7 +327,40 @@
 					<h4>Examples</h4>
 				</div>
 			</div>
+			
+			<div class="section">
+				<h3>Visualization libraries</h3>
+				
+				<div class="section">
+					<h4>Protovis</h4>
+				</div>
+				
+				<div class="section">
+					<h4>D3.js</h4>
+				</div>
+			</div>
+			
+			<div class="section">
+				<h3>Where is this heading?</h3>
+				
+				<div class="section">
+					<h4>Combining visualization libraries with mapping frameworks</h4>
+					
+					<div class="section">						
+						<div class="section">
+							<h5>Protovis + Google</h5>
+						</div>
+						
+						<div class="section">
+							<h5>D3.js + Polymaps + Hexbin.js</h5>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 		
+		
+		<div class="bigSeparator"></div>
+		<h1 id="brewers">Go Brewers!</h1>
 	</body>
 </html>

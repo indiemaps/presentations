@@ -8,4 +8,25 @@ body {
 
 div.section {
 	margin-left: 30px;
+	margin-bottom: 50px;
+}
+
+h1 {
+	color: #00cc99;
+}
+
+h3, h4, h5 {
+	color: #ccc;
+}
+
+li {
+	margin-bottom: 10px;
+}
+
+a {
+	color: red;
+}
+
+div.bigSeparator {
+	height: 500px;
 }
